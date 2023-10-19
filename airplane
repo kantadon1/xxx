@@ -1,0 +1,64 @@
+import java.util.Scanner;
+import java.util.Arrays;
+
+public class Main{
+    public static void main(String[] args){
+        Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
+        int[][] arr = new int[n][2];
+        int countL=0, countR=0, sumL, sumR, minL, minR;
+        
+        for(int i=0; i<n*2; i++){
+            sumL=0; 
+            sumR=0;
+              minL=100;
+              minR=100;
+            int weight = scan.nextInt();
+            for(int j=0; j<n; j++){
+                sumL += arr[j][0]; //sum left
+                sumR += arr[j][1]; //sum right
+                if(minL>arr[j][0]){ //find left min
+                    minL = arr[j][0];
+                }
+                if(minR>arr[j][1]){ // find right min
+                    minR = arr[j][1];
+                }
+            }
+            if(sumL=<sumR){ //left side less than or equal right side
+                if(countL==n){ //seat left side FULL
+                    for(int j=n-1; j>=0; j--){
+                        if(arr[j][0]==minL){ //found min
+                            arr[countR][1]=arr[j][0]; //move the replaced passenger to right side
+                            arr[j][0]=weight; //replace the passenger
+                            countR++;
+                            break;
+                        }
+                    }
+                }
+                else{ // seat left side AVAIABLE
+                    arr[countL][0] = weight; //passenger take a seat
+                    countL++;
+                }
+            }
+            else{ //right side less than left side
+                if(countR==n){ //seat right side FULL
+                    for(int j=n-1; j>=0; j--){
+                        if(arr[j][1]==minR){ //found min
+                            arr[countL][0]=arr[j][1]; //move the replaced passenger to left side
+                            arr[j][1]=weight; //replace the passenger
+                            countL++;
+                            break;
+                        }
+                    }
+                }
+                else{ //seat right side AVAIABLE
+                    arr[countR][1] = weight; //passenger take a seat
+                    countR++;
+                }
+            }
+        }
+        for(int i=0; i<n; i++){
+            System.out.println(arr[i][0] + " "+ arr[i][1]);
+        }
+    }
+}
